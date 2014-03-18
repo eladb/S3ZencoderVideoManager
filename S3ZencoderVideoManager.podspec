@@ -15,6 +15,5 @@ Pod::Spec.new do |s|
   s.public_header_files = "Classes/*.h"
   s.dependency 'Parse-iOS-SDK'
   s.dependency 'CLBlockObservation'
-  s.dependency 'AWSiOSSDK/Runtime'
-  s.dependency 'AWSiOSSDK/S3'
+  s.vendored_frameworks = 'Frameworks/AWSRuntime.framework', 'Frameworks/AWSS3.framework'
 end

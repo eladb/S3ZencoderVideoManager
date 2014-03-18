@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Sugar Studio. All rights reserved.
 //
 
-#import "AWSRuntime.h"
-#import "AWSS3.h"
+#import <AWSRuntime/AWSRuntime.h>
+#import <AWSS3/AWSS3.h>
 #import "Parse.h"
 #import "S3ZUploadManager.h"
 

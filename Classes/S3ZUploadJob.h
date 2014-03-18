@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AWSRuntime.h"
-#import "AWSS3.h"
+#import <AWSRuntime/AWSRuntime.h>
+#import <AWSS3/AWSS3.h>
 
 typedef NS_ENUM(NSInteger, JobUploadStage) {
     UploadQueued,
