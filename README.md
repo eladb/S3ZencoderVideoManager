@@ -69,12 +69,12 @@ it simply add the following line to your Podfile:
     configuration.awsCDN            = @""; // AWS CloudFront (Full https)
     configuration.zencoderAPI       = @""; // Zencoder API - https://app.zencoder.com/api/v2/jobs
     configuration.zencoderAPIKey    = @""; // Zencoder API Key
-    configuration.zencoderTimeout   = 0;   // Polling time in seconds to check Zencoder status if Push wasn't received. (Good practise value 30.0)
-    configuration.zencoderRetries   = 0;   // Number of Zencoder encoding retries before giving up. (Good practice value 3)
+    configuration.zencoderTimeout   = 30.0;   // Polling time in seconds to check Zencoder status if Push wasn't received.
+    configuration.zencoderRetries   = 3;   // Number of Zencoder encoding retries before giving up.
     configuration.parseAPI          = @""; // Parse API - http://YOUR_USERNAME:YOUR_PASSWORD@APP_NAME.parseapp.com/notify
-    configuration.cacheCapacity     = 0;   // Download Cache size in bytes. (Good practise value 300*1024*1024)
-    configuration.cachePath         = @""; // Download Cache file name. (Good practise value download.db)
-    configuration.uploadRetries     = 0;   // Number of uploading retries before giving up. (Good practice value 3)
+    configuration.cacheCapacity     = 100*1024*1024;   // Download Cache size in bytes.
+    configuration.cachePath         = @"cache.db"; // Download Cache file name.
+    configuration.uploadRetries     = 3;   // Number of uploading retries before giving up.
     [S3ZUploadManager setupWithConfiguration:configuration];
     [S3ZDownloadManager setupWithConfiguration:configuration];
 ```
