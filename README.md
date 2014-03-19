@@ -66,7 +66,7 @@ it simply add the following line to your Podfile:
     configuration.awsAccessKeyID    = @""; // AWS Access Key ID
     configuration.awsSecretKey      = @""; // AWS Secret Key
     configuration.awsBucket         = @""; // AWS Bucket
-    configuration.awsCDN            = @""; // AWS CloudFront (full https)
+    configuration.awsCDN            = @""; // AWS CloudFront (Full https)
     configuration.zencoderAPI       = @""; // Zencoder API - https://app.zencoder.com/api/v2/jobs
     configuration.zencoderAPIKey    = @""; // Zencoder API Key
     configuration.zencoderTimeout   = 0;   // Polling time in seconds to check Zencoder status if Push wasn't received. (Good practise value 30.0)
