@@ -11,7 +11,7 @@ S3ZencoderVideoManager contains 2 independent modules:
 
 2. S3ZDownloadManager
 
-The role of S3ZencoderVideoManager Uploader is a video upload queue to S3 and start encoding for HLS which is must for long/big video files on App Store apps. The encoding is done with Zencoder which is the best service because of API, uptime and compressing. See the example for more info.
+The role of S3ZencoderVideoManager Uploader is a video upload queue to S3 and start encoding for HLS which is must for long/big video files on App Store apps. The encoding is done with Zencoder which is the best service because of API, uptime and compression. See the example for more info.
 
 The role of S3ZencoderVideoManager Downloader is to be able to download big files with cache and progress support.
 
@@ -66,7 +66,7 @@ it simply add the following line to your Podfile:
     configuration.awsAccessKeyID    = @""; // AWS Access Key ID
     configuration.awsSecretKey      = @""; // AWS Secret Key
     configuration.awsBucket         = @""; // AWS Bucket
-    configuration.awsCDN            = @""; // AWS CloudFront
+    configuration.awsCDN            = @""; // AWS CloudFront (full https)
     configuration.zencoderAPI       = @""; // Zencoder API - https://app.zencoder.com/api/v2/jobs
     configuration.zencoderAPIKey    = @""; // Zencoder API Key
     configuration.zencoderTimeout   = 0;   // Polling time in seconds to check Zencoder status if Push wasn't received. (Good practise value 30.0)
