@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "S3ZencoderVideoManager"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "A video uploader to S3 and Zencoder encoding queue. One file downloader with cache"
   s.homepage         = "https://github.com/sugarso/S3ZencoderVideoManager"
   s.license          = 'MIT'
