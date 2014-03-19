@@ -72,7 +72,9 @@ static S3ZDownloadManager *instance = NULL;
         NSError *error = [NSError errorWithDomain:@"Uploader" code:0 userInfo:userInfo];
         
         self.task = nil;
-        self.block(NO, nil, error);
+        if (self.block) {
+            self.block(NO, nil, error);
+        }
     } else {
         // Cache
         NSData *data = [NSData dataWithContentsOfMappedFile:[location path]];
@@ -80,7 +82,9 @@ static S3ZDownloadManager *instance = NULL;
         [self.cache storeCachedResponse:cachedResponse forRequest:downloadTask.originalRequest];
         
         self.task = nil;
-        self.block(YES, location, nil);
+        if (self.block) {
+            self.block(YES, location, nil);
+        }
     }
 }
 
@@ -90,7 +94,9 @@ static S3ZDownloadManager *instance = NULL;
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    self.progressBlock((float)((double)totalBytesWritten/(double)totalBytesExpectedToWrite));
+    if (self.progressBlock) {
+        self.progressBlock((float)((double)totalBytesWritten/(double)totalBytesExpectedToWrite));
+    }
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
@@ -99,7 +105,9 @@ static S3ZDownloadManager *instance = NULL;
         NSLog(@"didCompleteWithError: %@", error);
         
         self.task = nil;
-        self.block(NO, nil, error);
+        if (self.block) {
+            self.block(NO, nil, error);
+        }
     }
 }
 
