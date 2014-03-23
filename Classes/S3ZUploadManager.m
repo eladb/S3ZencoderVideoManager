@@ -361,19 +361,24 @@ static S3ZUploadManager *instance = NULL;
         [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:requestDictionary options:0 error:0]];
         NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
             if (error) {
+                NSLog(@"encodeJob called (%d): %@", uploadJob.encodingRetries, error);
                 if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
-                    NSLog(@"encodeJob called (%d): %@", uploadJob.encodingRetries, error);
                     [self encodeJob:jobID];
                     uploadJob.encodingRetries++;
                 } else {
-                    NSLog(@"encodeJob called: %@", error);
                     uploadJob.stage = UploadEncodingFailed;
                 }
             } else {
                 NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
                 NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
                 if (HTTPURLResponse.statusCode != 200) {
-                    NSLog(@"HTTPURLResponse.statusCode != 200");
+                    NSLog(@"HTTPURLResponse.statusCode != 200 (%d)", uploadJob.encodingRetries);
+                    if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
+                        [self encodeJob:jobID];
+                        uploadJob.encodingRetries++;
+                    } else {
+                        uploadJob.stage = UploadEncodingFailed;
+                    }
                 } else {
                     uploadJob.stage = UploadEncoding;
                     NSNumber *encodingID = returnDictionary[@"id"];
@@ -397,18 +402,23 @@ static S3ZUploadManager *instance = NULL;
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
         NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
             if (error) {
+                NSLog(@"updateEncodingStatusForJob called (%d): %@", uploadJob.encodingRetries, error);
                 if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
-                    NSLog(@"updateEncodingStatusForJob called (%d): %@", uploadJob.encodingRetries, error);
                     [self updateEncodingStatusForJob:jobID];
                     uploadJob.encodingRetries++;
                 } else {
-                    NSLog(@"updateEncodingStatusForJob called: %@", error);
                     uploadJob.stage = UploadEncodingFailed;
                 }
             } else {
                 NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
                 if (HTTPURLResponse.statusCode != 200) {
-                    NSLog(@"HTTPURLResponse.statusCode != 200");
+                    NSLog(@"HTTPURLResponse.statusCode != 200 (%d)", uploadJob.encodingRetries);
+                    if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
+                        [self updateEncodingStatusForJob:jobID];
+                        uploadJob.encodingRetries++;
+                    } else {
+                        uploadJob.stage = UploadEncodingFailed;
+                    }
                 } else {
                     NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
                     [self notifyJobEncodingCompleted:returnDictionary[@"job"]];
@@ -443,12 +453,11 @@ static S3ZUploadManager *instance = NULL;
             uploadJob.stage = UploadDone;
             [self notifyAppBecomesInactive];
         } else if ([state isEqualToString:@"failed"]) {
+            NSLog(@"notifyJobEncodingCompleted (%d): failed", uploadJob.encodingRetries);
             if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
-                NSLog(@"notifyJobEncodingCompleted (%d): failed", uploadJob.encodingRetries);
                 [self reEncodeJob:uploadJob.jobID];
                 uploadJob.encodingRetries++;
             } else {
-                NSLog(@"notifyJobEncodingCompleted: failed");
                 uploadJob.stage = UploadEncodingFailed;
             }
         } else {
@@ -586,12 +595,11 @@ static S3ZUploadManager *instance = NULL;
     NSString *key = ((S3PutObjectRequest *)request).key;
     S3ZUploadJob *uploadJob = [self getJobWithKey:key];
     if (uploadJob) {
+        NSLog(@"didFailWithError called (%d): %@", uploadJob.uploadingRetries, error);
         if (uploadJob.uploadingRetries < self.configuration.uploadRetries) {
-            NSLog(@"didFailWithError called (%d): %@", uploadJob.uploadingRetries, error);
             [self reUploadJob:uploadJob.jobID];
             uploadJob.uploadingRetries++;
         } else {
-            NSLog(@"didFailWithError called: %@", error);
             uploadJob.stage = UploadUploadingFailed;
         }
     } else {
@@ -604,12 +612,11 @@ static S3ZUploadManager *instance = NULL;
     NSString *key = ((S3PutObjectRequest *)request).key;
     S3ZUploadJob *uploadJob = [self getJobWithKey:key];
     if (uploadJob) {
+        NSLog(@"didFailWithServiceException called (%d): %@", uploadJob.uploadingRetries, exception);
         if (uploadJob.uploadingRetries < self.configuration.uploadRetries) {
-            NSLog(@"didFailWithServiceException called (%d): %@", uploadJob.uploadingRetries, exception);
             [self reUploadJob:uploadJob.jobID];
             uploadJob.uploadingRetries++;
         } else {
-            NSLog(@"didFailWithServiceException called: %@", exception);
             uploadJob.stage = UploadUploadingFailed;
         }
     } else {
