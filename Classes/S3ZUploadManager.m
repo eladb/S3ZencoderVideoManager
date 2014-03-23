@@ -371,13 +371,18 @@ static S3ZUploadManager *instance = NULL;
                 }
             } else {
                 NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
-                uploadJob.stage = UploadEncoding;
-                NSNumber *encodingID = returnDictionary[@"id"];
-                uploadJob.encodingID = [encodingID stringValue];
-                [self notifyAppBecomesInactive];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.configuration.zencoderTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self updateEncodingStatusForJob:uploadJob.jobID];
-                });
+                NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
+                if (HTTPURLResponse.statusCode != 200) {
+                    NSLog(@"HTTPURLResponse.statusCode != 200");
+                } else {
+                    uploadJob.stage = UploadEncoding;
+                    NSNumber *encodingID = returnDictionary[@"id"];
+                    uploadJob.encodingID = [encodingID stringValue];
+                    [self notifyAppBecomesInactive];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.configuration.zencoderTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self updateEncodingStatusForJob:uploadJob.jobID];
+                    });
+                }
             }
         }];
         [task resume];
@@ -401,8 +406,13 @@ static S3ZUploadManager *instance = NULL;
                     uploadJob.stage = UploadEncodingFailed;
                 }
             } else {
-                NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
-                [self notifyJobEncodingCompleted:returnDictionary[@"job"]];
+                NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
+                if (HTTPURLResponse.statusCode != 200) {
+                    NSLog(@"HTTPURLResponse.statusCode != 200");
+                } else {
+                    NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
+                    [self notifyJobEncodingCompleted:returnDictionary[@"job"]];
+                }
             }
         }];
         [task resume];
