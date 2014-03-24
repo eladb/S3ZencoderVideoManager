@@ -162,7 +162,7 @@ static S3ZUploadManager *instance = NULL;
 
 - (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context toContainer:(NSString *)container
 {
-    BOOL *fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
     NSAssert(fileExists, @"File does not exists!");
     if (!fileExists) {
         return nil;
@@ -386,7 +386,7 @@ static S3ZUploadManager *instance = NULL;
                 NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
                 NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
                 if ((HTTPURLResponse.statusCode < 200) || (HTTPURLResponse.statusCode >= 300)) {
-                    NSLog(@"HTTPURLResponse.statusCode == %d (%d)", HTTPURLResponse.statusCode, uploadJob.encodingRetries);
+                    NSLog(@"HTTPURLResponse.statusCode == %ld (%d)", (long)HTTPURLResponse.statusCode, uploadJob.encodingRetries);
                     if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
                         [self encodeJob:jobID];
                         uploadJob.encodingRetries++;
@@ -426,7 +426,7 @@ static S3ZUploadManager *instance = NULL;
             } else {
                 NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
                 if ((HTTPURLResponse.statusCode < 200) || (HTTPURLResponse.statusCode >= 300)) {
-                    NSLog(@"HTTPURLResponse.statusCode == %d (%d)", HTTPURLResponse.statusCode, uploadJob.encodingRetries);
+                    NSLog(@"HTTPURLResponse.statusCode == %ld (%d)", (long)HTTPURLResponse.statusCode, uploadJob.encodingRetries);
                     if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
                         [self updateEncodingStatusForJob:jobID];
                         uploadJob.encodingRetries++;
