@@ -157,12 +157,13 @@ static S3ZUploadManager *instance = NULL;
 
 - (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context toContainer:(NSString *)container
 {
-    NSString *fileMD5 = [self fileMD5:[url path]];
-    if (!fileMD5) {
-        NSLog(@"Can't countinue without having a proper file md5. That means we can't read the file");
+    BOOL *fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
+    NSAssert(fileExists, @"File does not exists!");
+    if (!fileExists) {
         return nil;
     }
     
+    NSString *fileMD5 = [self fileMD5:[url path]];
     NSString *S3PathContainer = nil;
     // If no container was supplied, use md5 as file container.
     if(!container) {
@@ -170,6 +171,11 @@ static S3ZUploadManager *instance = NULL;
     } else {
         S3PathContainer = [NSString stringWithFormat:@"%@-%@", container, [fileMD5 substringToIndex:8]];
     }
+    
+    // Save the file for the upload process
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *newPath = [NSString stringWithFormat:@"%@/%@.MOV", documentsDirectory, S3PathContainer];
+    [[NSFileManager defaultManager] copyItemAtPath:[url path] toPath:newPath error:nil];
 
     NSString *key = [NSString stringWithFormat:@"%@/%@/MASTER.MOV", userID, S3PathContainer];
     
@@ -177,14 +183,14 @@ static S3ZUploadManager *instance = NULL;
     uploadJob.S3PathContainer = S3PathContainer;
     uploadJob.jobID = [[NSUUID UUID] UUIDString];
     uploadJob.userID = userID;
-    uploadJob.url = url;
+    uploadJob.url = [NSURL URLWithString:newPath];
     uploadJob.key = key;
     uploadJob.stage = UploadQueued;
     uploadJob.context = context;
 
     NSString *play = [NSString stringWithFormat:@"%@/%@/%@/video.m3u8", self.configuration.awsCDN, uploadJob.userID, uploadJob.S3PathContainer];
     uploadJob.playURL = [NSURL URLWithString:play];
-    uploadJob.transferOperation = [self.transferManager uploadFile:[url path] bucket:self.configuration.awsBucket key:key];
+    uploadJob.transferOperation = [self.transferManager uploadFile:newPath bucket:self.configuration.awsBucket key:key];
     uploadJob.putObjectRequest = uploadJob.transferOperation.putRequest;
     
     [self.jobs addObject:uploadJob];
@@ -585,6 +591,7 @@ static S3ZUploadManager *instance = NULL;
     NSString *key = ((S3PutObjectRequest *)request).key;
     S3ZUploadJob *uploadJob = [self getJobWithKey:key];
     if (uploadJob) {
+        [[NSFileManager defaultManager] removeItemAtPath:[uploadJob.url path] error:nil];
         [self encodeJob:uploadJob.jobID];
     } else {
         NSLog(@"didFailWithServiceException !uploadJob: key == %@", key);
