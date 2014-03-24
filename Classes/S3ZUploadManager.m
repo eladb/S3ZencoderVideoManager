@@ -189,7 +189,9 @@ static S3ZUploadManager *instance = NULL;
     uploadJob.context = context;
 
     NSString *play = [NSString stringWithFormat:@"%@/%@/%@/video.m3u8", self.configuration.awsCDN, uploadJob.userID, uploadJob.S3PathContainer];
+    NSString *download = [NSString stringWithFormat:@"%@/%@/%@/MASTER.MOV", self.configuration.awsCDN, uploadJob.userID, uploadJob.S3PathContainer];
     uploadJob.playURL = [NSURL URLWithString:play];
+    uploadJob.downloadURL = [NSURL URLWithString:download];
     uploadJob.transferOperation = [self.transferManager uploadFile:newPath bucket:self.configuration.awsBucket key:key];
     uploadJob.putObjectRequest = uploadJob.transferOperation.putRequest;
     

@@ -157,8 +157,7 @@
     S3ZUploadJob *uploadJob = (S3ZUploadJob *)[[S3ZUploadManager sharedInstance].jobs objectAtIndex:indexPath.row/2];
     if (indexPath.row % 2) {
         if ((uploadJob.stage == UploadDone) || (uploadJob.stage == UploadEncoding) || (uploadJob.stage == UploadEncodingFailed))  {
-            NSURL *url = ((S3ZUploadJob *)[[S3ZUploadManager sharedInstance].jobs objectAtIndex:indexPath.row/2]).url;
-            [[S3ZDownloadManager sharedInstance] downloadURL:url
+            [[S3ZDownloadManager sharedInstance] downloadURL:uploadJob.downloadURL
                                                 withBlock:^(BOOL succeeded, NSURL *location, NSError *error) {
                                                     if (!succeeded) {
                                                         self.downloadProgress[indexPath.row/2] = [NSNull null];
@@ -166,7 +165,7 @@
                                                             [self.tableView reloadData];
                                                         });
                                                     } else {
-                                                        NSString *fileName = [NSString stringWithFormat:@"%@.%@", [[NSUUID UUID] UUIDString], [url pathExtension]];
+                                                        NSString *fileName = [NSString stringWithFormat:@"%@.%@", [[NSUUID UUID] UUIDString], [uploadJob.downloadURL pathExtension]];
                                                         NSURL *destination = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:fileName]];
                                                         NSError *error;
                                                         [[NSFileManager defaultManager] moveItemAtURL:location toURL:destination error:&error];

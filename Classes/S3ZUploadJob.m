@@ -31,6 +31,7 @@
     self.url = [decoder decodeObjectForKey:@"url"];
     self.key = [decoder decodeObjectForKey:@"key"];
     self.playURL = [decoder decodeObjectForKey:@"playURL"];
+    self.downloadURL = [decoder decodeObjectForKey:@"downloadURL"];
     self.encodingRetries = [decoder decodeIntForKey:@"encodingRetries"];
     self.uploadingRetries = [decoder decodeIntForKey:@"uploadingRetries"];
     self.context = [decoder decodeObjectForKey:@"context"];
@@ -53,6 +54,7 @@
     [encoder encodeObject:self.url forKey:@"url"];
     [encoder encodeObject:self.key forKey:@"key"];
     [encoder encodeObject:self.playURL forKey:@"playURL"];
+    [encoder encodeObject:self.downloadURL forKey:@"downloadURL"];
     [encoder encodeInt:self.encodingRetries forKey:@"encodingRetries"];
     [encoder encodeInt:self.uploadingRetries forKey:@"uploadingRetries"];
     [encoder encodeObject:self.context forKey:@"context"];
