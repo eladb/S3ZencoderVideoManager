@@ -149,6 +149,8 @@ When starting a job the final play url can be used before the job done `@propert
 
 Each job has it's own `@property (nonatomic) NSString *jobID`.
 
+Each stage change will generate `S3ZUploadJobDidChange` notification with the `S3ZUploadJobStageDidChange` object.
+
 ### S3ZUploadManager
 
 Array with all S3ZUploadJob jobs:

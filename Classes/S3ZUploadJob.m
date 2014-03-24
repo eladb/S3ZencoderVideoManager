@@ -58,5 +58,10 @@
     [encoder encodeObject:self.context forKey:@"context"];
 }
 
+- (void)setStage:(JobUploadStage)stage
+{
+    _stage = stage;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"S3ZUploadJobStageDidChange" object:self];
+}
 
 @end
