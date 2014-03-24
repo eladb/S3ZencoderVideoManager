@@ -173,12 +173,12 @@ Accessing the shared instance:
 
 Starting a new upload job:
 ```objective-c
-- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID;
+- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context;
 ```
 
 Example:
 ```objective-c
-S3ZUploadJob *uploadJob = [[S3ZUploadManager sharedInstance] enqueueVideo:url forUserID:@"uploader"];
+S3ZUploadJob *uploadJob = [[S3ZUploadManager sharedInstance] enqueueVideo:url forUserID:@"uploader" withContext:nil];
 ```
 
 Cancelling an upload job:

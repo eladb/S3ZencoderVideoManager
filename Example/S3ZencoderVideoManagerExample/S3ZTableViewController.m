@@ -77,7 +77,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     NSURL *url = [info objectForKey:UIImagePickerControllerMediaURL];
-    S3ZUploadJob *uploadJob = [[S3ZUploadManager sharedInstance] enqueueVideo:url forUserID:@"uploader"];
+    S3ZUploadJob *uploadJob = [[S3ZUploadManager sharedInstance] enqueueVideo:url forUserID:@"uploader" withContext:nil];
     self.downloadProgress[[S3ZUploadManager sharedInstance].jobsCount-1] = [NSNull null];
     
     // Reload the table each time the state changes

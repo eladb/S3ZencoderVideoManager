@@ -150,12 +150,12 @@ static S3ZUploadManager *instance = NULL;
     return s;
 }
 
-- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID
+- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context
 {
-    return [self enqueueVideo:url forUserID:userID toContainer:[self iso8601UrlDate:url]];
+    return [self enqueueVideo:url forUserID:userID withContext:context toContainer:[self iso8601UrlDate:url]];
 }
 
-- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID toContainer:(NSString *)container
+- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context toContainer:(NSString *)container
 {
     NSString *fileMD5 = [self fileMD5:[url path]];
     if (!fileMD5) {
@@ -180,6 +180,7 @@ static S3ZUploadManager *instance = NULL;
     uploadJob.url = url;
     uploadJob.key = key;
     uploadJob.stage = UploadQueued;
+    uploadJob.context = context;
 
     NSString *play = [NSString stringWithFormat:@"%@/%@/%@/video.m3u8", self.configuration.awsCDN, uploadJob.userID, uploadJob.S3PathContainer];
     uploadJob.playURL = [NSURL URLWithString:play];

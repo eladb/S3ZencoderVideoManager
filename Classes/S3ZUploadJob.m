@@ -33,6 +33,7 @@
     self.playURL = [decoder decodeObjectForKey:@"playURL"];
     self.encodingRetries = [decoder decodeIntForKey:@"encodingRetries"];
     self.uploadingRetries = [decoder decodeIntForKey:@"uploadingRetries"];
+    self.context = [decoder decodeObjectForKey:@"context"];
     
     return self;
 }
@@ -54,6 +55,7 @@
     [encoder encodeObject:self.playURL forKey:@"playURL"];
     [encoder encodeInt:self.encodingRetries forKey:@"encodingRetries"];
     [encoder encodeInt:self.uploadingRetries forKey:@"uploadingRetries"];
+    [encoder encodeObject:self.context forKey:@"context"];
 }
 
 

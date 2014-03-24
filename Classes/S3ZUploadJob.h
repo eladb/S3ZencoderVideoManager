@@ -34,5 +34,6 @@ typedef NS_ENUM(NSInteger, JobUploadStage) {
 @property (strong, nonatomic) NSURL *playURL;
 @property (nonatomic) int encodingRetries;
 @property (nonatomic) int uploadingRetries;
+@property (strong, nonatomic) id<NSCoding> context;
 
 @end
