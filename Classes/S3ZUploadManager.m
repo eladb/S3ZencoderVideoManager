@@ -13,8 +13,8 @@
 
 @interface S3ZUploadManager () <AmazonServiceRequestDelegate>
 
-@property (nonatomic) S3TransferManager *transferManager;
-@property (nonatomic) NSMutableArray *jobs;
+@property (strong, nonatomic) S3TransferManager *transferManager;
+@property (strong, nonatomic) NSMutableArray *jobs;
 @property (readwrite, nonatomic) NSInteger jobsCount;
 @property (strong, nonatomic) S3ZConfiguration *configuration;
 

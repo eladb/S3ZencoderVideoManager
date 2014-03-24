@@ -10,20 +10,20 @@
 
 @interface S3ZConfiguration : NSObject
 
-@property (nonatomic) NSString *awsAccessKeyID;
-@property (nonatomic) NSString *awsSecretKey;
-@property (nonatomic) NSString *awsBucket;
-@property (nonatomic) NSString *awsCDN;
+@property (strong, nonatomic) NSString *awsAccessKeyID;
+@property (strong, nonatomic) NSString *awsSecretKey;
+@property (strong, nonatomic) NSString *awsBucket;
+@property (strong, nonatomic) NSString *awsCDN;
 
-@property (nonatomic) NSString *zencoderAPI;
-@property (nonatomic) NSString *zencoderAPIKey;
+@property (strong, nonatomic) NSString *zencoderAPI;
+@property (strong, nonatomic) NSString *zencoderAPIKey;
 @property (nonatomic) CGFloat zencoderTimeout;
 @property (nonatomic) NSInteger zencoderRetries;
 
-@property (nonatomic) NSString *parseAPI;
+@property (strong, nonatomic) NSString *parseAPI;
 
 @property (nonatomic) NSInteger cacheCapacity;
-@property (nonatomic) NSString *cachePath;
+@property (strong, nonatomic) NSString *cachePath;
 
 @property (nonatomic) NSInteger uploadRetries;
 

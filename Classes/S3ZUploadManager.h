@@ -12,7 +12,7 @@
 
 @interface S3ZUploadManager : NSObject
 
-@property (readonly, nonatomic) NSMutableArray *jobs;
+@property (readonly, strong, nonatomic) NSMutableArray *jobs;
 @property (readonly, nonatomic) NSInteger jobsCount;
 
 + (void)setupWithConfiguration:(S3ZConfiguration *)configuration;

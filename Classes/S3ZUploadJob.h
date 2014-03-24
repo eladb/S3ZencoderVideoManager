@@ -21,17 +21,17 @@ typedef NS_ENUM(NSInteger, JobUploadStage) {
 
 @interface S3ZUploadJob : NSObject <NSCoding>
 
-@property (nonatomic) NSString *jobID;
-@property (nonatomic) NSString *userID;
-@property (nonatomic) NSString *S3PathContainer;
-@property (nonatomic) NSString *encodingID;
+@property (strong, nonatomic) NSString *jobID;
+@property (strong, nonatomic) NSString *userID;
+@property (strong, nonatomic) NSString *S3PathContainer;
+@property (strong, nonatomic) NSString *encodingID;
 @property (nonatomic) float uploadProgress;  // 0..1
 @property (nonatomic) JobUploadStage stage;
-@property (nonatomic) S3TransferOperation *transferOperation;
-@property (nonatomic) S3PutObjectRequest *putObjectRequest;
-@property (nonatomic) NSURL *url;
-@property (nonatomic) NSString *key;
-@property (nonatomic) NSURL *playURL;
+@property (strong, nonatomic) S3TransferOperation *transferOperation;
+@property (strong, nonatomic) S3PutObjectRequest *putObjectRequest;
+@property (strong, nonatomic) NSURL *url;
+@property (strong, nonatomic) NSString *key;
+@property (strong, nonatomic) NSURL *playURL;
 @property (nonatomic) int encodingRetries;
 @property (nonatomic) int uploadingRetries;
 
