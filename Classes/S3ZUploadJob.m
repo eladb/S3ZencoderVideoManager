@@ -66,4 +66,50 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"S3ZUploadJobStageDidChange" object:self];
 }
 
+- (NSString *)convertStageToString:(JobUploadStage)stage
+{
+    NSArray *strings = @[
+                         @"UploadQueued",
+                         @"UploadUploading",
+                         @"UploadUploadingFailed",
+                         @"UploadEncoding",
+                         @"UploadEncodingFailed",
+                         @"UploadDone"
+                         ];
+    return strings[stage];
+}
+
+- (NSString *)description
+{
+    NSMutableString *string = [NSMutableString stringWithFormat:@"<S3ZUploadJob: %@", self.jobID];
+    
+    if (self.stage) {
+        [string appendFormat:@", Stage: %@", [self convertStageToString:self.stage]];
+    }
+    if (self.stage == UploadUploading) {
+        [string appendFormat:@", Upload Progress: %.2f%%", 100*self.uploadProgress];
+    }
+    if (self.stage == UploadEncodingFailed) {
+        [string appendFormat:@", Uploading Retries: %d", self.uploadingRetries];
+    }
+    if (self.stage == UploadUploadingFailed) {
+        [string appendFormat:@", Encoding Retries: %d", self.encodingRetries];
+    }
+    
+    [string appendFormat:@", Local URL: %@", self.url];
+    [string appendFormat:@", Play URL: %@", self.playURL];
+    [string appendFormat:@", Download URL: %@", self.downloadURL];
+    [string appendFormat:@", User ID: %@", self.userID];
+    
+    if ((self.stage == UploadEncoding) || (self.stage == UploadEncodingFailed) || (self.stage == UploadDone)) {
+        [string appendFormat:@", Encoding ID: %@", self.encodingID];
+    }
+    
+    [string appendFormat:@", S3 Path: %@", self.S3PathContainer];
+    [string appendFormat:@", S3 Key: %@", self.key];
+    [string appendString:@">"];
+    
+    return [string copy];
+}
+
 @end
