@@ -30,8 +30,8 @@
     // Load Uploades
     [[S3ZUploadManager sharedInstance] notifyAppBecomesActive];
     
-    // Reload the table each time the jobsCount updates
-    [[S3ZUploadManager sharedInstance] addObserver:self forKeyPath:@"jobsCount" block:^(id old, id new) {
+    // Reload the table each time the jobCount updates
+    [[S3ZUploadManager sharedInstance] addObserver:self forKeyPath:@"jobCount" block:^(id old, id new) {
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.tableView reloadData];
         });
@@ -57,7 +57,7 @@
 {
     if (!_downloadProgress) {
         _downloadProgress = [[NSMutableArray alloc] init];
-        for (int i = 0; i < [S3ZUploadManager sharedInstance].jobsCount; i++) {
+        for (int i = 0; i < [S3ZUploadManager sharedInstance].jobCount; i++) {
             _downloadProgress[i] = [NSNull null];
         }
     }
@@ -78,7 +78,7 @@
 {
     NSURL *url = [info objectForKey:UIImagePickerControllerMediaURL];
     S3ZUploadJob *uploadJob = [[S3ZUploadManager sharedInstance] enqueueVideo:url forUserID:@"uploader" withContext:nil];
-    self.downloadProgress[[S3ZUploadManager sharedInstance].jobsCount-1] = [NSNull null];
+    self.downloadProgress[[S3ZUploadManager sharedInstance].jobCount-1] = [NSNull null];
     
     // Reload the table each time the state changes
     [uploadJob addObserver:self forKeyPath:@"stage" block:^(id old, id new) {
@@ -109,7 +109,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2*[S3ZUploadManager sharedInstance].jobsCount;
+    return 2*[S3ZUploadManager sharedInstance].jobCount;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

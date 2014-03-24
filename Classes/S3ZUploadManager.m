@@ -15,7 +15,7 @@
 
 @property (strong, nonatomic) S3TransferManager *transferManager;
 @property (strong, nonatomic) NSMutableArray *jobs;
-@property (readwrite, nonatomic) NSInteger jobsCount;
+@property (readwrite, nonatomic) NSInteger jobCount;
 @property (strong, nonatomic) S3ZConfiguration *configuration;
 
 @end
@@ -71,12 +71,12 @@ static S3ZUploadManager *instance = NULL;
 - (void)notifyAppBecomesActive
 {
     //NSLog(@"notifyAppBecomesActive");
-    if (!self.jobsCount) {
+    if (!self.jobCount) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSData *data = [userDefaults objectForKey:@"jobs"];
         if (data) {
             self.jobs = [[NSKeyedUnarchiver unarchiveObjectWithData:data] mutableCopy];
-            self.jobsCount = [self.jobs count];
+            self.jobCount = [self.jobs count];
             for (S3ZUploadJob *uploadJob in self.jobs) {
                 if ((uploadJob.stage == UploadUploading) || (uploadJob.stage == UploadQueued)) {
                     if (![[NSFileManager defaultManager] fileExistsAtPath:[uploadJob.url path]]) {
@@ -201,7 +201,7 @@ static S3ZUploadManager *instance = NULL;
     uploadJob.putObjectRequest = uploadJob.transferOperation.putRequest;
     
     [self.jobs addObject:uploadJob];
-    self.jobsCount++;
+    self.jobCount++;
     
     [self notifyAppBecomesInactive];
     
@@ -506,7 +506,7 @@ static S3ZUploadManager *instance = NULL;
 {
     [self.transferManager cancelAllTransfers];
     self.jobs = nil;
-    self.jobsCount = 0;
+    self.jobCount = 0;
     [[S3ZUploadManager sharedInstance] notifyAppBecomesInactive];
 }
 
