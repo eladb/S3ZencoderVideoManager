@@ -66,7 +66,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"S3ZUploadJobStageDidChange" object:self];
 }
 
-+ (NSString *)NSStringFromS3ZUploadJob:(S3ZUploadJobStage)stage
+extern NSString *NSStringFromS3ZUploadJob(S3ZUploadJobStage stage)
 {
     NSArray *strings = @[
                          @"S3ZUploadJobQueued",
@@ -84,7 +84,7 @@
     NSMutableString *string = [NSMutableString stringWithFormat:@"<S3ZUploadJob: %@", self.jobID];
     
     if (self.stage) {
-        [string appendFormat:@", Stage: %@", [S3ZUploadJob NSStringFromS3ZUploadJob:self.stage]];
+        [string appendFormat:@", Stage: %@", NSStringFromS3ZUploadJob(self.stage)];
     }
     if (self.stage == S3ZUploadJobUploading) {
         [string appendFormat:@", Upload Progress: %.2f%%", 100*self.uploadProgress];
