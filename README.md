@@ -138,12 +138,12 @@ app.listen();
 
 Each upload queue job can be found in one of the following states:
 
-    UploadQueued
-    UploadUploading
-    UploadUploadingFailed // After uploadRetries
-    UploadEncoding
-    UploadEncodingFailed  // After zencoderRetries
-    UploadDone
+    S3ZUploadJobQueued
+    S3ZUploadJobUploading
+    S3ZUploadJobUploadFailed    // After uploadRetries
+    S3ZUploadJobEncoding
+    S3ZUploadJobEncodingFailed  // After zencoderRetries
+    S3ZUploadJobDone
 
 When starting a job the final play url can be used before the job done `@property (nonatomic) NSURL *playURL`.
 
