@@ -66,9 +66,10 @@ static S3ZDownloadManager *instance = NULL;
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
 {
     NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)downloadTask.response;
-    if (HTTPURLResponse.statusCode != 200) {
-        NSLog(@"HTTPURLResponse.statusCode != 200");
-        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: NSLocalizedString(@"HTTPURLResponse.statusCode != 200", nil) };
+    if ((HTTPURLResponse.statusCode < 200) || (HTTPURLResponse.statusCode >= 300)) {
+        NSString *status = [NSString stringWithFormat:@"HTTPURLResponse.statusCode == %d", HTTPURLResponse.statusCode];
+        NSLog(status);
+        NSDictionary *userInfo = @{ NSLocalizedDescriptionKey: NSLocalizedString(status, nil) };
         NSError *error = [NSError errorWithDomain:@"Uploader" code:0 userInfo:userInfo];
         
         self.task = nil;

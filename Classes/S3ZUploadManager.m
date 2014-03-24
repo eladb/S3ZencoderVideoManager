@@ -378,8 +378,8 @@ static S3ZUploadManager *instance = NULL;
             } else {
                 NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
                 NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
-                if (HTTPURLResponse.statusCode != 200) {
-                    NSLog(@"HTTPURLResponse.statusCode != 200 (%d)", uploadJob.encodingRetries);
+                if ((HTTPURLResponse.statusCode < 200) || (HTTPURLResponse.statusCode >= 300)) {
+                    NSLog(@"HTTPURLResponse.statusCode == %d (%d)", HTTPURLResponse.statusCode, uploadJob.encodingRetries);
                     if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
                         [self encodeJob:jobID];
                         uploadJob.encodingRetries++;
@@ -418,8 +418,8 @@ static S3ZUploadManager *instance = NULL;
                 }
             } else {
                 NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
-                if (HTTPURLResponse.statusCode != 200) {
-                    NSLog(@"HTTPURLResponse.statusCode != 200 (%d)", uploadJob.encodingRetries);
+                if ((HTTPURLResponse.statusCode < 200) || (HTTPURLResponse.statusCode >= 300)) {
+                    NSLog(@"HTTPURLResponse.statusCode == %d (%d)", HTTPURLResponse.statusCode, uploadJob.encodingRetries);
                     if (uploadJob.encodingRetries < self.configuration.zencoderRetries) {
                         [self updateEncodingStatusForJob:jobID];
                         uploadJob.encodingRetries++;
