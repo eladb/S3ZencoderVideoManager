@@ -78,10 +78,10 @@ static S3ZUploadManager *instance = NULL;
             self.jobs = [[NSKeyedUnarchiver unarchiveObjectWithData:data] mutableCopy];
             self.jobCount = [self.jobs count];
             for (S3ZUploadJob *uploadJob in self.jobs) {
-                if ((uploadJob.stage == UploadUploading) || (uploadJob.stage == UploadQueued)) {
+                if ((uploadJob.stage == S3ZUploadJobUploading) || (uploadJob.stage == S3ZUploadJobQueued)) {
                     if (![[NSFileManager defaultManager] fileExistsAtPath:[uploadJob.url path]]) {
                         NSLog(@"notifyAppBecomesActive: file not found");
-                        uploadJob.stage = UploadUploadingFailed;
+                        uploadJob.stage = S3ZUploadJobUploadFailed;
                     } else {
                         if (uploadJob.putObjectRequest) {
                             uploadJob.transferOperation = [self.transferManager upload:uploadJob.putObjectRequest];
@@ -95,7 +95,7 @@ static S3ZUploadManager *instance = NULL;
     }
     
     for (S3ZUploadJob *uploadJob in self.jobs) {
-        if (uploadJob.stage == UploadEncoding) {
+        if (uploadJob.stage == S3ZUploadJobEncoding) {
             [self updateEncodingStatusForJob:uploadJob.jobID];
         }
     }
@@ -190,7 +190,7 @@ static S3ZUploadManager *instance = NULL;
     uploadJob.userID = userID;
     uploadJob.url = [NSURL URLWithString:newPath];
     uploadJob.key = key;
-    uploadJob.stage = UploadQueued;
+    uploadJob.stage = S3ZUploadJobQueued;
     uploadJob.context = context;
 
     NSString *play = [NSString stringWithFormat:@"%@/%@/%@/video.m3u8", self.configuration.awsCDN, uploadJob.userID, uploadJob.S3PathContainer];
@@ -380,7 +380,7 @@ static S3ZUploadManager *instance = NULL;
                     [self encodeJob:jobID];
                     uploadJob.encodingRetries++;
                 } else {
-                    uploadJob.stage = UploadEncodingFailed;
+                    uploadJob.stage = S3ZUploadJobEncodingFailed;
                 }
             } else {
                 NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
@@ -391,10 +391,10 @@ static S3ZUploadManager *instance = NULL;
                         [self encodeJob:jobID];
                         uploadJob.encodingRetries++;
                     } else {
-                        uploadJob.stage = UploadEncodingFailed;
+                        uploadJob.stage = S3ZUploadJobEncodingFailed;
                     }
                 } else {
-                    uploadJob.stage = UploadEncoding;
+                    uploadJob.stage = S3ZUploadJobEncoding;
                     NSNumber *encodingID = returnDictionary[@"id"];
                     uploadJob.encodingID = [encodingID stringValue];
                     [self notifyAppBecomesInactive];
@@ -421,7 +421,7 @@ static S3ZUploadManager *instance = NULL;
                     [self updateEncodingStatusForJob:jobID];
                     uploadJob.encodingRetries++;
                 } else {
-                    uploadJob.stage = UploadEncodingFailed;
+                    uploadJob.stage = S3ZUploadJobEncodingFailed;
                 }
             } else {
                 NSHTTPURLResponse *HTTPURLResponse = (NSHTTPURLResponse *)response;
@@ -431,7 +431,7 @@ static S3ZUploadManager *instance = NULL;
                         [self updateEncodingStatusForJob:jobID];
                         uploadJob.encodingRetries++;
                     } else {
-                        uploadJob.stage = UploadEncodingFailed;
+                        uploadJob.stage = S3ZUploadJobEncodingFailed;
                     }
                 } else {
                     NSDictionary *returnDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:0];
@@ -464,7 +464,7 @@ static S3ZUploadManager *instance = NULL;
     S3ZUploadJob *uploadJob = [self getJobWithEncodingID:encodingID];
     if (uploadJob) {
         if ([state isEqualToString:@"finished"]) {
-            uploadJob.stage = UploadDone;
+            uploadJob.stage = S3ZUploadJobDone;
             [self notifyAppBecomesInactive];
         } else if ([state isEqualToString:@"failed"]) {
             NSLog(@"notifyJobEncodingCompleted (%d): failed", uploadJob.encodingRetries);
@@ -472,7 +472,7 @@ static S3ZUploadManager *instance = NULL;
                 [self reEncodeJob:uploadJob.jobID];
                 uploadJob.encodingRetries++;
             } else {
-                uploadJob.stage = UploadEncodingFailed;
+                uploadJob.stage = S3ZUploadJobEncodingFailed;
             }
         } else {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.configuration.zencoderTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -586,7 +586,7 @@ static S3ZUploadManager *instance = NULL;
     S3ZUploadJob *uploadJob = [self getJobWithKey:key];
     if (uploadJob) {
         uploadJob.uploadProgress = (CGFloat)((double)totalBytesWritten/(double)totalBytesExpectedToWrite);
-        uploadJob.stage = UploadUploading;
+        uploadJob.stage = S3ZUploadJobUploading;
         [self notifyAppBecomesInactive];
     } else {
         NSLog(@"didSendData !uploadJob: key == %@", key);
@@ -617,7 +617,7 @@ static S3ZUploadManager *instance = NULL;
             [self reUploadJob:uploadJob.jobID];
             uploadJob.uploadingRetries++;
         } else {
-            uploadJob.stage = UploadUploadingFailed;
+            uploadJob.stage = S3ZUploadJobUploadFailed;
         }
     } else {
         NSLog(@"didFailWithError !uploadJob: key == %@", key);
@@ -636,7 +636,7 @@ static S3ZUploadManager *instance = NULL;
             [self reUploadJob:uploadJob.jobID];
             uploadJob.uploadingRetries++;
         } else {
-            uploadJob.stage = UploadUploadingFailed;
+            uploadJob.stage = S3ZUploadJobUploadFailed;
         }
     } else {
         NSLog(@"didFailWithServiceException !uploadJob: key == %@", key);

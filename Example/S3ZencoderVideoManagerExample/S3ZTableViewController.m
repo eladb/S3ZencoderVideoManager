@@ -132,18 +132,18 @@
         cell.backgroundColor = [UIColor whiteColor];
         cell.textLabel.textColor = [UIColor blackColor];
         cell.detailTextLabel.textColor = [UIColor blackColor];
-        if (uploadJob.stage == UploadQueued) {
-            cell.detailTextLabel.text = @"UploadQueued";
-        } else if (uploadJob.stage == UploadUploading) {
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"UploadUploading %f%%",uploadJob.uploadProgress*100];
-        } else if (uploadJob.stage == UploadEncoding) {
-            cell.detailTextLabel.text = @"UploadEncoding";
-        } else if (uploadJob.stage == UploadDone) {
-            cell.detailTextLabel.text = @"UploadDone";
-        } else if (uploadJob.stage == UploadEncodingFailed) {
-            cell.detailTextLabel.text = @"UploadEncodingFailed";
-        } else if (uploadJob.stage == UploadUploadingFailed) {
-            cell.detailTextLabel.text = @"UploadUploadingFailed";
+        if (uploadJob.stage == S3ZUploadJobQueued) {
+            cell.detailTextLabel.text = @"S3ZUploadJobQueued";
+        } else if (uploadJob.stage == S3ZUploadJobUploading) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"S3ZUploadJobUploading %f%%",uploadJob.uploadProgress*100];
+        } else if (uploadJob.stage == S3ZUploadJobEncoding) {
+            cell.detailTextLabel.text = @"S3ZUploadJobEncoding";
+        } else if (uploadJob.stage == S3ZUploadJobDone) {
+            cell.detailTextLabel.text = @"S3ZUploadJobDone";
+        } else if (uploadJob.stage == S3ZUploadJobEncodingFailed) {
+            cell.detailTextLabel.text = @"S3ZUploadJobEncodingFailed";
+        } else if (uploadJob.stage == S3ZUploadJobUploadFailed) {
+            cell.detailTextLabel.text = @"S3ZUploadJobUploadFailed";
         } else {
             NSLog(@"uploadJob.stage unknown value");
         }
@@ -156,7 +156,7 @@
 {
     S3ZUploadJob *uploadJob = (S3ZUploadJob *)[[S3ZUploadManager sharedInstance].jobs objectAtIndex:indexPath.row/2];
     if (indexPath.row % 2) {
-        if ((uploadJob.stage == UploadDone) || (uploadJob.stage == UploadEncoding) || (uploadJob.stage == UploadEncodingFailed))  {
+        if ((uploadJob.stage == S3ZUploadJobDone) || (uploadJob.stage == S3ZUploadJobEncoding) || (uploadJob.stage == S3ZUploadJobEncodingFailed))  {
             [[S3ZDownloadManager sharedInstance] downloadURL:uploadJob.downloadURL
                                                 withBlock:^(BOOL succeeded, NSURL *location, NSError *error) {
                                                     if (!succeeded) {
@@ -187,11 +187,11 @@
                                                 }];
         }
     } else {
-        if (uploadJob.stage == UploadEncodingFailed) {
+        if (uploadJob.stage == S3ZUploadJobEncodingFailed) {
             [[S3ZUploadManager sharedInstance] reEncodeJob:uploadJob.jobID];
-        } else if (uploadJob.stage == UploadUploadingFailed) {
+        } else if (uploadJob.stage == S3ZUploadJobUploadFailed) {
             [[S3ZUploadManager sharedInstance] reUploadJob:uploadJob.jobID];
-        } else if (uploadJob.stage == UploadDone) {
+        } else if (uploadJob.stage == S3ZUploadJobDone) {
             self.moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:uploadJob.playURL];
             [self.moviePlayer.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
             [self presentMoviePlayerViewControllerAnimated:self.moviePlayer];

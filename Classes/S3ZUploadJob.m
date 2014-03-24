@@ -24,7 +24,7 @@
     self.uploadProgress = [decoder decodeFloatForKey:@"uploadProgress"];
     self.S3PathContainer = [decoder decodeObjectForKey:@"S3PathContainer"];
     NSValue *stageValue = [decoder decodeObjectForKey:@"stage"];
-    JobUploadStage stage;
+    S3ZUploadJobStage stage;
     [stageValue getValue:&stage];
     self.stage = stage;
     self.putObjectRequest = [decoder decodeObjectForKey:@"putObjectRequest"];
@@ -46,8 +46,8 @@
     [encoder encodeObject:self.encodingID forKey:@"encodingID"];
     [encoder encodeFloat:self.uploadProgress forKey:@"uploadProgress"];
     [encoder encodeObject:self.S3PathContainer forKey:@"S3PathContainer"];
-    JobUploadStage stage = self.stage;
-    NSValue *stageValue = [NSValue value:&stage withObjCType:@encode(JobUploadStage)];
+    S3ZUploadJobStage stage = self.stage;
+    NSValue *stageValue = [NSValue value:&stage withObjCType:@encode(S3ZUploadJobStage)];
     [encoder encodeObject:stageValue forKey:@"stage"];
     self.putObjectRequest.responseTimer = nil;
     [encoder encodeObject:self.putObjectRequest forKey:@"putObjectRequest"];
@@ -60,21 +60,21 @@
     [encoder encodeObject:self.context forKey:@"context"];
 }
 
-- (void)setStage:(JobUploadStage)stage
+- (void)setStage:(S3ZUploadJobStage)stage
 {
     _stage = stage;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"S3ZUploadJobStageDidChange" object:self];
 }
 
-- (NSString *)convertStageToString:(JobUploadStage)stage
+- (NSString *)convertStageToString:(S3ZUploadJobStage)stage
 {
     NSArray *strings = @[
-                         @"UploadQueued",
-                         @"UploadUploading",
-                         @"UploadUploadingFailed",
-                         @"UploadEncoding",
-                         @"UploadEncodingFailed",
-                         @"UploadDone"
+                         @"S3ZUploadJobQueued",
+                         @"S3ZUploadJobUploading",
+                         @"S3ZUploadJobUploadFailed",
+                         @"S3ZUploadJobEncoding",
+                         @"S3ZUploadJobEncodingFailed",
+                         @"S3ZUploadJobDone"
                          ];
     return strings[stage];
 }
@@ -86,13 +86,13 @@
     if (self.stage) {
         [string appendFormat:@", Stage: %@", [self convertStageToString:self.stage]];
     }
-    if (self.stage == UploadUploading) {
+    if (self.stage == S3ZUploadJobUploading) {
         [string appendFormat:@", Upload Progress: %.2f%%", 100*self.uploadProgress];
     }
-    if (self.stage == UploadEncodingFailed) {
+    if (self.stage == S3ZUploadJobEncodingFailed) {
         [string appendFormat:@", Uploading Retries: %d", self.uploadingRetries];
     }
-    if (self.stage == UploadUploadingFailed) {
+    if (self.stage == S3ZUploadJobUploadFailed) {
         [string appendFormat:@", Encoding Retries: %d", self.encodingRetries];
     }
     
@@ -101,7 +101,7 @@
     [string appendFormat:@", Download URL: %@", self.downloadURL];
     [string appendFormat:@", User ID: %@", self.userID];
     
-    if ((self.stage == UploadEncoding) || (self.stage == UploadEncodingFailed) || (self.stage == UploadDone)) {
+    if ((self.stage == S3ZUploadJobEncoding) || (self.stage == S3ZUploadJobEncodingFailed) || (self.stage == S3ZUploadJobDone)) {
         [string appendFormat:@", Encoding ID: %@", self.encodingID];
     }
     

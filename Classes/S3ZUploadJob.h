@@ -10,13 +10,13 @@
 #import <AWSRuntime/AWSRuntime.h>
 #import <AWSS3/AWSS3.h>
 
-typedef NS_ENUM(NSInteger, JobUploadStage) {
-    UploadQueued,
-    UploadUploading,
-    UploadUploadingFailed,
-    UploadEncoding,
-    UploadEncodingFailed,
-    UploadDone
+typedef NS_ENUM(NSInteger, S3ZUploadJobStage) {
+    S3ZUploadJobQueued,
+    S3ZUploadJobUploading,
+    S3ZUploadJobUploadFailed,
+    S3ZUploadJobEncoding,
+    S3ZUploadJobEncodingFailed,
+    S3ZUploadJobDone
 };
 
 @interface S3ZUploadJob : NSObject <NSCoding>
@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, JobUploadStage) {
 @property (strong, nonatomic) NSString *S3PathContainer;
 @property (strong, nonatomic) NSString *encodingID;
 @property (nonatomic) float uploadProgress;  // 0..1
-@property (nonatomic) JobUploadStage stage;
+@property (nonatomic) S3ZUploadJobStage stage;
 @property (strong, nonatomic) S3TransferOperation *transferOperation;
 @property (strong, nonatomic) S3PutObjectRequest *putObjectRequest;
 @property (strong, nonatomic) NSURL *url;
