@@ -79,10 +79,15 @@ static S3ZUploadManager *instance = NULL;
             self.jobsCount = [self.jobs count];
             for (S3ZUploadJob *uploadJob in self.jobs) {
                 if ((uploadJob.stage == UploadUploading) || (uploadJob.stage == UploadQueued)) {
-                    if (uploadJob.putObjectRequest) {
-                        uploadJob.transferOperation = [self.transferManager upload:uploadJob.putObjectRequest];
+                    if (![[NSFileManager defaultManager] fileExistsAtPath:[uploadJob.url path]]) {
+                        NSLog(@"notifyAppBecomesActive: file not found");
+                        uploadJob.stage = UploadUploadingFailed;
                     } else {
-                        uploadJob.transferOperation = [self.transferManager uploadFile:[uploadJob.url path] bucket:self.configuration.awsBucket key:uploadJob.key];
+                        if (uploadJob.putObjectRequest) {
+                            uploadJob.transferOperation = [self.transferManager upload:uploadJob.putObjectRequest];
+                        } else {
+                            uploadJob.transferOperation = [self.transferManager uploadFile:[uploadJob.url path] bucket:self.configuration.awsBucket key:uploadJob.key];
+                        }
                     }
                 }
             }
