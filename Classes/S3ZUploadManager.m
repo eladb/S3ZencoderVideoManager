@@ -612,6 +612,8 @@ static S3ZUploadManager *instance = NULL;
     if (uploadJob) {
         NSLog(@"didFailWithError called (%d): %@", uploadJob.uploadingRetries, error);
         if (uploadJob.uploadingRetries < self.configuration.uploadRetries) {
+            [uploadJob.transferOperation cancel];
+            uploadJob.transferOperation = nil;
             [self reUploadJob:uploadJob.jobID];
             uploadJob.uploadingRetries++;
         } else {
@@ -629,6 +631,8 @@ static S3ZUploadManager *instance = NULL;
     if (uploadJob) {
         NSLog(@"didFailWithServiceException called (%d): %@", uploadJob.uploadingRetries, exception);
         if (uploadJob.uploadingRetries < self.configuration.uploadRetries) {
+            [uploadJob.transferOperation cancel];
+            uploadJob.transferOperation = nil;
             [self reUploadJob:uploadJob.jobID];
             uploadJob.uploadingRetries++;
         } else {
