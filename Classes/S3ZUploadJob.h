@@ -37,4 +37,6 @@ typedef NS_ENUM(NSInteger, S3ZUploadJobStage) {
 @property (nonatomic) int uploadingRetries;
 @property (strong, nonatomic) id<NSCoding> context;
 
++ (NSString *)NSStringFromS3ZUploadJob:(S3ZUploadJobStage)stage;
+
 @end
