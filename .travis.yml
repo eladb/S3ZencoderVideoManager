@@ -1,8 +1,7 @@
 language: objective-c
 before_install: 
-    - gem install cocoapods
+    - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
     - cd Example
-    - pod install
 xcode_workspace: S3ZencoderVideoManagerExample.xcworkspace
 xcode_scheme: S3ZencoderVideoManagerExample
-xcode_sdk: iphonesimulator7.0
+xcode_sdk: iphonesimulator
