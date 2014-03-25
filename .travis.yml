@@ -1,4 +1,4 @@
 language: objective-c
 install:
 - cd Example
-script: xctool -workspace S3ZencoderVideoManagerExample.xcworkspace -scheme S3ZencoderVideoManagerExample -configuration Release -sdk iphonesimulator7.0 build
+script: xctool -workspace S3ZencoderVideoManagerExample.xcworkspace -scheme S3ZencoderVideoManagerExample -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
