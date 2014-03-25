@@ -1,0 +1,4 @@
+language: objective-c
+xcode_workspace: S3ZencoderVideoManagerExample.xcworkspace
+xcode_scheme: S3ZencoderVideoManagerExample
+xcode_sdk: iphonesimulator7.0
