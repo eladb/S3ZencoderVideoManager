@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/sugarso/S3ZencoderVideoManager.png)](https://travis-ci.org/sugarso/S3ZencoderVideoManager)
 [![Version](http://cocoapod-badges.herokuapp.com/v/S3ZencoderVideoManager/badge.png)](http://cocoadocs.org/docsets/S3ZencoderVideoManager)
+[![Analytics](https://ga-beacon.appspot.com/UA-29713074-4
+/S3ZencoderVideoManager/README)](https://github.com/igrigorik/ga-beacon)
+
 
 ## General Info
 
