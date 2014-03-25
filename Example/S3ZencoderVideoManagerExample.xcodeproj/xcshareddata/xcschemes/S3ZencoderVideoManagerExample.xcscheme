@@ -98,16 +98,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B2EE102618E190D600463335"
-               BuildableName = "S3ZencoderVideoManagerExample Tests.xctest"
-               BlueprintName = "S3ZencoderVideoManagerExample Tests"
-               ReferencedContainer = "container:S3ZencoderVideoManagerExample.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

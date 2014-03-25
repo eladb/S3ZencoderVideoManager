@@ -15,23 +15,8 @@
 		B2CE53BB18D7531D0021F701 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE53BA18D7531D0021F701 /* CoreGraphics.framework */; };
 		B2CE53BD18D7531D0021F701 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE53BC18D7531D0021F701 /* UIKit.framework */; };
 		B2CE53FF18D757CE0021F701 /* S3ZTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2CE53FE18D757CE0021F701 /* S3ZTableViewController.m */; };
-		B2EE102818E190D700463335 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE53D718D7531D0021F701 /* XCTest.framework */; };
-		B2EE102918E190D700463335 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE53B818D7531D0021F701 /* Foundation.framework */; };
-		B2EE102A18E190D700463335 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE53BC18D7531D0021F701 /* UIKit.framework */; };
-		B2EE103018E190D700463335 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2EE102E18E190D700463335 /* InfoPlist.strings */; };
-		B2EE103218E190D700463335 /* S3ZencoderVideoManagerExample_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EE103118E190D700463335 /* S3ZencoderVideoManagerExample_Tests.m */; };
 		B912DF7FA1C24B0AB3E17736 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2566D31055E426DA8FD1CD0 /* libPods.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		B2EE103418E190D700463335 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B2CE53AD18D7531D0021F701 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B2CE53B418D7531D0021F701;
-			remoteInfo = S3ZencoderVideoManagerExample;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		B29B67F618D8649A003F96BC /* S3ZAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S3ZAppDelegate.h; sourceTree = "<group>"; };
@@ -48,11 +33,6 @@
 		B2CE53D718D7531D0021F701 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		B2CE53FD18D757CE0021F701 /* S3ZTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S3ZTableViewController.h; sourceTree = "<group>"; };
 		B2CE53FE18D757CE0021F701 /* S3ZTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S3ZTableViewController.m; sourceTree = "<group>"; };
-		B2EE102718E190D700463335 /* S3ZencoderVideoManagerExample Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "S3ZencoderVideoManagerExample Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2EE102D18E190D700463335 /* S3ZencoderVideoManagerExample Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "S3ZencoderVideoManagerExample Tests-Info.plist"; sourceTree = "<group>"; };
-		B2EE102F18E190D700463335 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B2EE103118E190D700463335 /* S3ZencoderVideoManagerExample_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = S3ZencoderVideoManagerExample_Tests.m; sourceTree = "<group>"; };
-		B2EE103318E190D700463335 /* S3ZencoderVideoManagerExample Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "S3ZencoderVideoManagerExample Tests-Prefix.pch"; sourceTree = "<group>"; };
 		BFCE91052E804621AB9FF7A1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		E2566D31055E426DA8FD1CD0 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -69,16 +49,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B2EE102418E190D600463335 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B2EE102818E190D700463335 /* XCTest.framework in Frameworks */,
-				B2EE102A18E190D700463335 /* UIKit.framework in Frameworks */,
-				B2EE102918E190D700463335 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -86,7 +56,6 @@
 			isa = PBXGroup;
 			children = (
 				B2CE53BE18D7531D0021F701 /* S3ZencoderVideoManagerExample */,
-				B2EE102B18E190D700463335 /* S3ZencoderVideoManagerExample Tests */,
 				B2CE53B718D7531D0021F701 /* Frameworks */,
 				B2CE53B618D7531D0021F701 /* Products */,
 				BFCE91052E804621AB9FF7A1 /* Pods.xcconfig */,
@@ -97,7 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				B2CE53B518D7531D0021F701 /* S3ZencoderVideoManagerExample.app */,
-				B2EE102718E190D700463335 /* S3ZencoderVideoManagerExample Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -138,25 +106,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		B2EE102B18E190D700463335 /* S3ZencoderVideoManagerExample Tests */ = {
-			isa = PBXGroup;
-			children = (
-				B2EE103118E190D700463335 /* S3ZencoderVideoManagerExample_Tests.m */,
-				B2EE102C18E190D700463335 /* Supporting Files */,
-			);
-			path = "S3ZencoderVideoManagerExample Tests";
-			sourceTree = "<group>";
-		};
-		B2EE102C18E190D700463335 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				B2EE102D18E190D700463335 /* S3ZencoderVideoManagerExample Tests-Info.plist */,
-				B2EE102E18E190D700463335 /* InfoPlist.strings */,
-				B2EE103318E190D700463335 /* S3ZencoderVideoManagerExample Tests-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -179,24 +128,6 @@
 			productReference = B2CE53B518D7531D0021F701 /* S3ZencoderVideoManagerExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B2EE102618E190D600463335 /* S3ZencoderVideoManagerExample Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B2EE103818E190D700463335 /* Build configuration list for PBXNativeTarget "S3ZencoderVideoManagerExample Tests" */;
-			buildPhases = (
-				B2EE102318E190D600463335 /* Sources */,
-				B2EE102418E190D600463335 /* Frameworks */,
-				B2EE102518E190D600463335 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B2EE103518E190D700463335 /* PBXTargetDependency */,
-			);
-			name = "S3ZencoderVideoManagerExample Tests";
-			productName = "S3ZencoderVideoManagerExample Tests";
-			productReference = B2EE102718E190D700463335 /* S3ZencoderVideoManagerExample Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -209,9 +140,6 @@
 				TargetAttributes = {
 					B2CE53B418D7531D0021F701 = {
 						DevelopmentTeam = SZHLQT8428;
-					};
-					B2EE102618E190D600463335 = {
-						TestTargetID = B2CE53B418D7531D0021F701;
 					};
 				};
 			};
@@ -229,7 +157,6 @@
 			projectRoot = "";
 			targets = (
 				B2CE53B418D7531D0021F701 /* S3ZencoderVideoManagerExample */,
-				B2EE102618E190D600463335 /* S3ZencoderVideoManagerExample Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -241,14 +168,6 @@
 			files = (
 				B29B67FD18D864AE003F96BC /* Images.xcassets in Resources */,
 				B29B67FB18D864A4003F96BC /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2EE102518E190D600463335 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B2EE103018E190D700463335 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,23 +217,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B2EE102318E190D600463335 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B2EE103218E190D700463335 /* S3ZencoderVideoManagerExample_Tests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		B2EE103518E190D700463335 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B2CE53B418D7531D0021F701 /* S3ZencoderVideoManagerExample */;
-			targetProxy = B2EE103418E190D700463335 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		B29B67F918D864A4003F96BC /* Main.storyboard */ = {
@@ -323,14 +226,6 @@
 				B29B67FA18D864A4003F96BC /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		B2EE102E18E190D700463335 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B2EE102F18E190D700463335 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -445,48 +340,6 @@
 			};
 			name = Release;
 		};
-		B2EE103618E190D700463335 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/S3ZencoderVideoManagerExample.app/S3ZencoderVideoManagerExample";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "S3ZencoderVideoManagerExample Tests/S3ZencoderVideoManagerExample Tests-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "S3ZencoderVideoManagerExample Tests/S3ZencoderVideoManagerExample Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		B2EE103718E190D700463335 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/S3ZencoderVideoManagerExample.app/S3ZencoderVideoManagerExample";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "S3ZencoderVideoManagerExample Tests/S3ZencoderVideoManagerExample Tests-Prefix.pch";
-				INFOPLIST_FILE = "S3ZencoderVideoManagerExample Tests/S3ZencoderVideoManagerExample Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -507,14 +360,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		B2EE103818E190D700463335 /* Build configuration list for PBXNativeTarget "S3ZencoderVideoManagerExample Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B2EE103618E190D700463335 /* Debug */,
-				B2EE103718E190D700463335 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
