@@ -5,3 +5,5 @@ before_install:
 xcode_workspace: S3ZencoderVideoManagerExample.xcworkspace
 xcode_scheme: S3ZencoderVideoManagerExample
 xcode_sdk: iphonesimulator
+notifications:
+  slack: jovie:0FlDSMqvRcz8ZSn84GGlLrW8
