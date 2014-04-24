@@ -16,6 +16,7 @@
 		B2CE53BD18D7531D0021F701 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE53BC18D7531D0021F701 /* UIKit.framework */; };
 		B2CE53FF18D757CE0021F701 /* S3ZTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2CE53FE18D757CE0021F701 /* S3ZTableViewController.m */; };
 		B912DF7FA1C24B0AB3E17736 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2566D31055E426DA8FD1CD0 /* libPods.a */; };
+		F460B4DF190984E800ADECB7 /* S3ZObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = F460B4DE190984E800ADECB7 /* S3ZObserver.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		B2CE53FE18D757CE0021F701 /* S3ZTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S3ZTableViewController.m; sourceTree = "<group>"; };
 		BFCE91052E804621AB9FF7A1 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		E2566D31055E426DA8FD1CD0 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F460B4DD190984E800ADECB7 /* S3ZObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S3ZObserver.h; sourceTree = "<group>"; };
+		F460B4DE190984E800ADECB7 /* S3ZObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S3ZObserver.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				B29B67F718D8649A003F96BC /* S3ZAppDelegate.m */,
 				B2CE53FD18D757CE0021F701 /* S3ZTableViewController.h */,
 				B2CE53FE18D757CE0021F701 /* S3ZTableViewController.m */,
+				F460B4DD190984E800ADECB7 /* S3ZObserver.h */,
+				F460B4DE190984E800ADECB7 /* S3ZObserver.m */,
 				B29B67FC18D864AE003F96BC /* Images.xcassets */,
 				B2CE53BF18D7531D0021F701 /* Supporting Files */,
 			);
@@ -214,6 +219,7 @@
 				B29B67F818D8649A003F96BC /* S3ZAppDelegate.m in Sources */,
 				B29B680118D864B9003F96BC /* main.m in Sources */,
 				B2CE53FF18D757CE0021F701 /* S3ZTableViewController.m in Sources */,
+				F460B4DF190984E800ADECB7 /* S3ZObserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
