@@ -8,16 +8,18 @@
 
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "NSObject+CLBlockObservation.h"
 #import "S3ZConfiguration.h"
 #import "S3ZUploadManager.h"
 #import "S3ZDownloadManager.h"
 #import "S3ZTableViewController.h"
+#import "S3ZObserver.h"
 
 @interface S3ZTableViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic) MPMoviePlayerViewController *moviePlayer;
 @property (nonatomic) NSMutableArray *downloadProgress;
+
+@property (nonatomic) NSMutableArray *observers;
 
 @end
 
@@ -27,27 +29,24 @@
 {
     [super viewDidLoad];
     
+    self.observers = [[NSMutableArray alloc] init];
+    
     // Load Uploades
     [[S3ZUploadManager sharedInstance] notifyAppBecomesActive];
     
     // Reload the table each time the jobCount updates
-    [[S3ZUploadManager sharedInstance] addObserver:self forKeyPath:@"jobCount" block:^(id old, id new) {
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self.tableView reloadData];
-        });
-    }];
+    [self.observers addObject:[S3ZObserver observerForObject:[S3ZUploadManager sharedInstance] keyPath:@"jobCount" block:^{
+        [self.tableView reloadData];
+    }]];
+    
     // Reload the table each time the state changes
     for (S3ZUploadJob *uploadJob in [S3ZUploadManager sharedInstance].jobs) {
-        [uploadJob addObserver:self forKeyPath:@"stage" block:^(id old, id new) {
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self.tableView reloadData];
-            });
-        }];
-        [uploadJob addObserver:self forKeyPath:@"uploadProgress" block:^(id old, id new) {
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self.tableView reloadData];
-            });
-        }];
+        [self.observers addObject:[S3ZObserver observerForObject:uploadJob keyPath:@"stage" block:^{
+            [self.tableView reloadData];
+        }]];
+        [self.observers addObject:[S3ZObserver observerForObject:uploadJob keyPath:@"uploadProgress" block:^{
+            [self.tableView reloadData];
+        }]];
     }
     
     self.clearsSelectionOnViewWillAppear = NO;
@@ -81,16 +80,12 @@
     self.downloadProgress[[S3ZUploadManager sharedInstance].jobCount-1] = [NSNull null];
     
     // Reload the table each time the state changes
-    [uploadJob addObserver:self forKeyPath:@"stage" block:^(id old, id new) {
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self.tableView reloadData];
-        });
-    }];
-    [uploadJob addObserver:self forKeyPath:@"uploadProgress" block:^(id old, id new) {
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self.tableView reloadData];
-        });
-    }];
+    [self.observers addObject:[S3ZObserver observerForObject:uploadJob keyPath:@"stage" block:^{
+        [self.tableView reloadData];
+    }]];
+    [self.observers addObject:[S3ZObserver observerForObject:uploadJob keyPath:@"uploadProgress" block:^{
+        [self.tableView reloadData];
+    }]];
     
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
