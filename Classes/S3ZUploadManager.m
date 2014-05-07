@@ -29,12 +29,12 @@ static S3ZUploadManager *instance = NULL;
     if (!instance) {
         instance = [[S3ZUploadManager alloc] init];
         instance.configuration = configuration;
-        
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(applicationDidEnterBackground)
                                                      name:UIApplicationDidEnterBackgroundNotification
                                                    object:nil];
-        
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(applicationWillEnterForeground)
                                                      name:UIApplicationWillEnterForegroundNotification
@@ -93,7 +93,7 @@ static S3ZUploadManager *instance = NULL;
             }
         }
     }
-    
+
     for (S3ZUploadJob *uploadJob in self.jobs) {
         if (uploadJob.stage == S3ZUploadJobEncoding) {
             [self updateEncodingStatusForJob:uploadJob.jobID];
@@ -128,10 +128,10 @@ static S3ZUploadManager *instance = NULL;
         NSLog(@"ERROR GETTING FILE MD5");
         return nil;
     }
-    
+
     CC_MD5_CTX md5;
     CC_MD5_Init(&md5);
-    
+
     BOOL done = NO;
     while (!done) {
         NSData *fileData = [handle readDataOfLength: 2048];
@@ -140,7 +140,7 @@ static S3ZUploadManager *instance = NULL;
             done = YES;
         }
     }
-    
+
     unsigned char digest[CC_MD5_DIGEST_LENGTH];
     CC_MD5_Final(digest, &md5);
     NSString *s = [NSString stringWithFormat: @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
@@ -167,7 +167,7 @@ static S3ZUploadManager *instance = NULL;
     if (!fileExists) {
         return nil;
     }
-    
+
     NSString *fileMD5 = [self fileMD5:[url path]];
     NSString *S3PathContainer = nil;
     // If no container was supplied, use md5 as file container.
@@ -176,14 +176,14 @@ static S3ZUploadManager *instance = NULL;
     } else {
         S3PathContainer = [NSString stringWithFormat:@"%@-%@", container, [fileMD5 substringToIndex:8]];
     }
-    
+
     // Save the file for the upload process
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *newPath = [NSString stringWithFormat:@"%@/%@.MOV", documentsDirectory, S3PathContainer];
     [[NSFileManager defaultManager] copyItemAtPath:[url path] toPath:newPath error:nil];
 
     NSString *key = [NSString stringWithFormat:@"%@/%@/MASTER.MOV", userID, S3PathContainer];
-    
+
     S3ZUploadJob *uploadJob = [[S3ZUploadJob alloc] init];
     uploadJob.S3PathContainer = S3PathContainer;
     uploadJob.jobID = [[NSUUID UUID] UUIDString];
@@ -199,12 +199,12 @@ static S3ZUploadManager *instance = NULL;
     uploadJob.downloadURL = [NSURL URLWithString:download];
     uploadJob.transferOperation = [self.transferManager uploadFile:newPath bucket:self.configuration.awsBucket key:key];
     uploadJob.putObjectRequest = uploadJob.transferOperation.putRequest;
-    
+
     [self.jobs addObject:uploadJob];
     self.jobCount++;
-    
+
     [self notifyAppBecomesInactive];
-    
+
     return uploadJob;
 }
 
@@ -215,7 +215,7 @@ static S3ZUploadManager *instance = NULL;
         // Paths for files
         NSString *input = [NSString stringWithFormat:@"s3://%@/%@", self.configuration.awsBucket, uploadJob.key];
         NSString *output = [NSString stringWithFormat:@"s3://%@/%@/%@/", self.configuration.awsBucket, uploadJob.userID, uploadJob.S3PathContainer];
-        
+
         // Run Zencoder
         NSDictionary *requestDictionary = @{
                                             @"input": input,
@@ -232,59 +232,59 @@ static S3ZUploadManager *instance = NULL;
                                                         @"video_bitrate": @2500, // Deduced following https://support.google.com/youtube/answer/2853702?hl=en logic.
                                                         @"audio_normalize": @true
                                                         },
-                                                    @{
-                                                        @"audio_bitrate": @64,
-                                                        @"audio_sample_rate": @22050,
-                                                        @"base_url": output,
-                                                        @"filename": @"file-64k.m3u8",
-                                                        @"format": @"aac",
-                                                        @"public": @1,
-                                                        @"type": @"segmented",
-                                                        @"audio_normalize": @true
-                                                        },
-                                                    @{
-                                                        @"audio_bitrate": @56,
-                                                        @"audio_sample_rate": @22050,
-                                                        @"base_url": output,
-                                                        @"decoder_bitrate_cap": @360,
-                                                        @"decoder_buffer_size": @840,
-                                                        @"filename": @"file-240k.m3u8",
-                                                        @"max_frame_rate": @15,
-                                                        @"public": @1,
-                                                        @"type": @"segmented",
-                                                        @"video_bitrate": @184,
-                                                        @"width": @400,
-                                                        @"format": @"ts",
-                                                        @"audio_normalize": @true
-                                                        },
-                                                    @{
-                                                        @"audio_bitrate": @56,
-                                                        @"audio_sample_rate": @22050,
-                                                        @"base_url": output,
-                                                        @"decoder_bitrate_cap": @578,
-                                                        @"decoder_buffer_size": @1344,
-                                                        @"filename": @"file-440k.m3u8",
-                                                        @"public": @1,
-                                                        @"type": @"segmented",
-                                                        @"video_bitrate": @384,
-                                                        @"width": @400,
-                                                        @"format": @"ts",
-                                                        @"audio_normalize": @true
-                                                        },
-                                                    @{
-                                                        @"audio_bitrate": @56,
-                                                        @"audio_sample_rate": @22050,
-                                                        @"base_url": output,
-                                                        @"decoder_bitrate_cap": @960,
-                                                        @"decoder_buffer_size": @2240,
-                                                        @"filename": @"file-640k.m3u8",
-                                                        @"public": @1,
-                                                        @"type": @"segmented",
-                                                        @"video_bitrate": @584,
-                                                        @"width": @480,
-                                                        @"format": @"ts",
-                                                        @"audio_normalize": @true
-                                                        },
+                                                    // @{
+                                                    //     @"audio_bitrate": @64,
+                                                    //     @"audio_sample_rate": @22050,
+                                                    //     @"base_url": output,
+                                                    //     @"filename": @"file-64k.m3u8",
+                                                    //     @"format": @"aac",
+                                                    //     @"public": @1,
+                                                    //     @"type": @"segmented",
+                                                    //     @"audio_normalize": @true
+                                                    //     },
+                                                    // @{
+                                                    //     @"audio_bitrate": @56,
+                                                    //     @"audio_sample_rate": @22050,
+                                                    //     @"base_url": output,
+                                                    //     @"decoder_bitrate_cap": @360,
+                                                    //     @"decoder_buffer_size": @840,
+                                                    //     @"filename": @"file-240k.m3u8",
+                                                    //     @"max_frame_rate": @15,
+                                                    //     @"public": @1,
+                                                    //     @"type": @"segmented",
+                                                    //     @"video_bitrate": @184,
+                                                    //     @"width": @400,
+                                                    //     @"format": @"ts",
+                                                    //     @"audio_normalize": @true
+                                                    //     },
+                                                    // @{
+                                                    //     @"audio_bitrate": @56,
+                                                    //     @"audio_sample_rate": @22050,
+                                                    //     @"base_url": output,
+                                                    //     @"decoder_bitrate_cap": @578,
+                                                    //     @"decoder_buffer_size": @1344,
+                                                    //     @"filename": @"file-440k.m3u8",
+                                                    //     @"public": @1,
+                                                    //     @"type": @"segmented",
+                                                    //     @"video_bitrate": @384,
+                                                    //     @"width": @400,
+                                                    //     @"format": @"ts",
+                                                    //     @"audio_normalize": @true
+                                                    //     },
+                                                    // @{
+                                                    //     @"audio_bitrate": @56,
+                                                    //     @"audio_sample_rate": @22050,
+                                                    //     @"base_url": output,
+                                                    //     @"decoder_bitrate_cap": @960,
+                                                    //     @"decoder_buffer_size": @2240,
+                                                    //     @"filename": @"file-640k.m3u8",
+                                                    //     @"public": @1,
+                                                    //     @"type": @"segmented",
+                                                    //     @"video_bitrate": @584,
+                                                    //     @"width": @480,
+                                                    //     @"format": @"ts",
+                                                    //     @"audio_normalize": @true
+                                                    //     },
                                                     @{
                                                         @"audio_bitrate": @56,
                                                         @"audio_sample_rate": @22050,
@@ -299,71 +299,71 @@ static S3ZUploadManager *instance = NULL;
                                                         @"format": @"ts",
                                                         @"audio_normalize": @true
                                                         },
-                                                    @{
-                                                        @"audio_bitrate": @56,
-                                                        @"audio_sample_rate": @22050,
-                                                        @"base_url": output,
-                                                        @"decoder_bitrate_cap": @2310,
-                                                        @"decoder_buffer_size": @5390,
-                                                        @"filename": @"file-1540k.m3u8",
-                                                        @"public": @1,
-                                                        @"type": @"segmented",
-                                                        @"video_bitrate": @1484,
-                                                        @"width": @960,
-                                                        @"format": @"ts",
-                                                        @"audio_normalize": @true
-                                                        },
-                                                    @{
-                                                        @"audio_bitrate": @56,
-                                                        @"audio_sample_rate": @22050,
-                                                        @"base_url": output,
-                                                        @"decoder_bitrate_cap": @3060,
-                                                        @"decoder_buffer_size": @7140,
-                                                        @"filename": @"file-2040k.m3u8",
-                                                        @"public": @1,
-                                                        @"type": @"segmented",
-                                                        @"video_bitrate": @1984,
-                                                        @"width": @1024,
-                                                        @"format": @"ts",
-                                                        @"audio_normalize": @true
-                                                        },
+                                                    // @{
+                                                    //     @"audio_bitrate": @56,
+                                                    //     @"audio_sample_rate": @22050,
+                                                    //     @"base_url": output,
+                                                    //     @"decoder_bitrate_cap": @2310,
+                                                    //     @"decoder_buffer_size": @5390,
+                                                    //     @"filename": @"file-1540k.m3u8",
+                                                    //     @"public": @1,
+                                                    //     @"type": @"segmented",
+                                                    //     @"video_bitrate": @1484,
+                                                    //     @"width": @960,
+                                                    //     @"format": @"ts",
+                                                    //     @"audio_normalize": @true
+                                                    //     },
+                                                    // @{
+                                                    //     @"audio_bitrate": @56,
+                                                    //     @"audio_sample_rate": @22050,
+                                                    //     @"base_url": output,
+                                                    //     @"decoder_bitrate_cap": @3060,
+                                                    //     @"decoder_buffer_size": @7140,
+                                                    //     @"filename": @"file-2040k.m3u8",
+                                                    //     @"public": @1,
+                                                    //     @"type": @"segmented",
+                                                    //     @"video_bitrate": @1984,
+                                                    //     @"width": @1024,
+                                                    //     @"format": @"ts",
+                                                    //     @"audio_normalize": @true
+                                                    //     },
                                                     @{
                                                         @"base_url": output,
                                                         @"filename": @"video.m3u8",
                                                         @"public": @1,
                                                         @"streams": @[
-                                                                @{
-                                                                    @"bandwidth": @2040,
-                                                                    @"path": @"file-2040k.m3u8"
-                                                                    },
-                                                                @{
-                                                                    @"bandwidth": @1540,
-                                                                    @"path": @"file-1540k.m3u8"
-                                                                    },
+                                                                // @{
+                                                                //     @"bandwidth": @2040,
+                                                                //     @"path": @"file-2040k.m3u8"
+                                                                //     },
+                                                                // @{
+                                                                //     @"bandwidth": @1540,
+                                                                //     @"path": @"file-1540k.m3u8"
+                                                                //     },
                                                                 @{
                                                                     @"bandwidth": @1040,
                                                                     @"path": @"file-1040k.m3u8"
-                                                                    },
-                                                                @{
-                                                                    @"bandwidth": @640,
-                                                                    @"path": @"file-640k.m3u8"
-                                                                    },
-                                                                @{
-                                                                    @"bandwidth": @440,
-                                                                    @"path": @"file-440k.m3u8"
-                                                                    },
-                                                                @{
-                                                                    @"bandwidth": @240,
-                                                                    @"path": @"file-240k.m3u8"
-                                                                    },
-                                                                @{
-                                                                    @"bandwidth": @64,
-                                                                    @"path": @"file-64k.m3u8"
-                                                                    }
+                                                                    }//,
+                                                                // @{
+                                                                //     @"bandwidth": @640,
+                                                                //     @"path": @"file-640k.m3u8"
+                                                                //     },
+                                                                // @{
+                                                                //     @"bandwidth": @440,
+                                                                //     @"path": @"file-440k.m3u8"
+                                                                //     },
+                                                                // @{
+                                                                //     @"bandwidth": @240,
+                                                                //     @"path": @"file-240k.m3u8"
+                                                                //     },
+                                                                // @{
+                                                                //     @"bandwidth": @64,
+                                                                //     @"path": @"file-64k.m3u8"
+                                                                //     }
                                                                 ],
                                                         @"type": @"playlist"
-                                                    }
-                                                ]
+                                                        }
+                                                    ]
                                             };
 
         // Request
@@ -450,7 +450,7 @@ static S3ZUploadManager *instance = NULL;
         // Cancel
         [uploadJob.transferOperation cancel];
         uploadJob.transferOperation = nil;
-        
+
         // Remove from jobs
         [self.jobs removeObject:uploadJob];
     }
@@ -563,7 +563,7 @@ static S3ZUploadManager *instance = NULL;
         // Initialize the S3 Client.
         AmazonS3Client *s3 = [[AmazonS3Client alloc] initWithAccessKey:self.configuration.awsAccessKeyID
                                                          withSecretKey:self.configuration.awsSecretKey];
-        
+
         // Initialize the S3TransferManager
         _transferManager = [S3TransferManager new];
         _transferManager.s3 = s3;
