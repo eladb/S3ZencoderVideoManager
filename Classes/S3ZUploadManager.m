@@ -229,8 +229,10 @@ static S3ZUploadManager *instance = NULL;
                                                         @"filename": @"video.mp4",
                                                         @"h264_profile": @"main",
                                                         @"speed" : @1,
-                                                        @"video_bitrate": @2500, // Deduced following https://support.google.com/youtube/answer/2853702?hl=en logic.
-                                                        @"audio_normalize": @true
+                                                        @"quality": @3,
+//                                                        @"video_bitrate": @2500, // Deduced following https://support.google.com/youtube/answer/2853702?hl=en logic.
+//                                                        @"audio_normalize": @true
+                                                        @"public": @1
                                                         },
                                                     // @{
                                                     //     @"audio_bitrate": @64,
@@ -285,20 +287,21 @@ static S3ZUploadManager *instance = NULL;
                                                     //     @"format": @"ts",
                                                     //     @"audio_normalize": @true
                                                     //     },
-                                                    @{
-                                                        @"audio_bitrate": @56,
-                                                        @"audio_sample_rate": @22050,
-                                                        @"base_url": output,
-                                                        @"decoder_bitrate_cap": @1500,
-                                                        @"decoder_buffer_size": @4000,
-                                                        @"filename": @"file-1040k.m3u8",
-                                                        @"public": @1,
-                                                        @"type": @"segmented",
-                                                        @"video_bitrate": @1000,
-                                                        @"width": @640,
-                                                        @"format": @"ts",
-                                                        @"audio_normalize": @true
-                                                        },
+//                                                    @{
+//                                                        @"audio_bitrate": @56,
+//                                                        @"audio_sample_rate": @22050,
+//                                                        @"base_url": output,
+//                                                        @"decoder_bitrate_cap": @1500,
+//                                                        @"decoder_buffer_size": @4000,
+//                                                        @"filename": @"file-1040k.m3u8",
+//                                                        @"public": @1,
+//                                                        @"type": @"segmented",
+//                                                        @"video_bitrate": @1000,
+//                                                        @"width": @640,
+//                                                        @"format": @"ts",
+//                                                        @"segment_seconds": @2,
+//                                                        //@"audio_normalize": @true
+//                                                        },
                                                     // @{
                                                     //     @"audio_bitrate": @56,
                                                     //     @"audio_sample_rate": @22050,
@@ -328,9 +331,22 @@ static S3ZUploadManager *instance = NULL;
                                                     //     @"audio_normalize": @true
                                                     //     },
                                                     @{
+                                                        @"max_video_bitrate" : @800,
+                                                        @"size" : @"640x360",
+                                                        @"speed" : @1,
+                                                        @"quality" :@3,
+                                                        @"filename":@"HLS.m3u8",
+                                                        @"type":@"segmented",
+                                                        @"segment_seconds":@3,
+                                                        @"format":@"ts",
+                                                        @"base_url": output,
+                                                        @"public":@1
+                                                    },
+                                                    @{
                                                         @"base_url": output,
                                                         @"filename": @"video.m3u8",
                                                         @"public": @1,
+                                                        @"type": @"playlist",
                                                         @"streams": @[
                                                                 // @{
                                                                 //     @"bandwidth": @2040,
@@ -340,10 +356,10 @@ static S3ZUploadManager *instance = NULL;
                                                                 //     @"bandwidth": @1540,
                                                                 //     @"path": @"file-1540k.m3u8"
                                                                 //     },
-                                                                @{
-                                                                    @"bandwidth": @1040,
-                                                                    @"path": @"file-1040k.m3u8"
-                                                                    }//,
+//                                                                @{
+//                                                                    @"bandwidth": @1040,
+//                                                                    @"path": @"file-1040k.m3u8"
+//                                                                    }//,
                                                                 // @{
                                                                 //     @"bandwidth": @640,
                                                                 //     @"path": @"file-640k.m3u8"
@@ -360,8 +376,11 @@ static S3ZUploadManager *instance = NULL;
                                                                 //     @"bandwidth": @64,
                                                                 //     @"path": @"file-64k.m3u8"
                                                                 //     }
-                                                                ],
-                                                        @"type": @"playlist"
+                                                                @{
+                                                                    @"bandwidth": @900,
+                                                                    @"path": @"HLS.m3u8",
+                                                                }//,
+                                                            ],
                                                         }
                                                     ]
                                             };
