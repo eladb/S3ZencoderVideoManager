@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, S3ZUploadJobStage) {
 @property (strong, nonatomic) NSString *userID;
 @property (strong, nonatomic) NSString *S3PathContainer;
 @property (strong, nonatomic) NSString *encodingID;
+@property (strong, nonatomic) NSString *cookie;
 @property (nonatomic) float uploadProgress;  // 0..1
 @property (nonatomic) S3ZUploadJobStage stage;
 @property (strong, nonatomic) S3TransferOperation *transferOperation;

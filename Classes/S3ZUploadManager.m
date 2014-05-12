@@ -155,12 +155,12 @@ static S3ZUploadManager *instance = NULL;
     return s;
 }
 
-- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context
+- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context cookie:(NSString *)cookie
 {
-    return [self enqueueVideo:url forUserID:userID withContext:context toContainer:[self iso8601UrlDate:url]];
+    return [self enqueueVideo:url forUserID:userID withContext:context cookie:cookie toContainer:[self iso8601UrlDate:url]];
 }
 
-- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context toContainer:(NSString *)container
+- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context cookie:(NSString *)cookie toContainer:(NSString *)container
 {
     BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:[url path]];
     NSAssert(fileExists, @"File does not exists!");
@@ -191,6 +191,7 @@ static S3ZUploadManager *instance = NULL;
     uploadJob.url = [NSURL URLWithString:newPath];
     uploadJob.key = key;
     uploadJob.stage = S3ZUploadJobQueued;
+    uploadJob.cookie = cookie;
     uploadJob.context = context;
 
     NSString *play = [NSString stringWithFormat:@"%@/%@/%@/video.m3u8", self.configuration.awsCDN, uploadJob.userID, uploadJob.S3PathContainer];
@@ -216,10 +217,12 @@ static S3ZUploadManager *instance = NULL;
         NSString *input = [NSString stringWithFormat:@"s3://%@/%@", self.configuration.awsBucket, uploadJob.key];
         NSString *output = [NSString stringWithFormat:@"s3://%@/%@/%@/", self.configuration.awsBucket, uploadJob.userID, uploadJob.S3PathContainer];
 
+        NSString *cookie = uploadJob.cookie.length > 0 ? uploadJob.cookie : @"";
+        
         // Run Zencoder
         NSDictionary *requestDictionary = @{
                                             @"input": input,
-                                            @"pass_through": [PFInstallation currentInstallation].deviceToken,
+                                            @"pass_through": cookie,
                                             @"notifications": @[
                                                     self.configuration.parseAPI,
                                                     ],
