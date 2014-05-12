@@ -472,6 +472,7 @@ static S3ZUploadManager *instance = NULL;
 
         // Remove from jobs
         [self.jobs removeObject:uploadJob];
+        self.jobCount--;
     }
 }
 
