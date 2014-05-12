@@ -18,7 +18,7 @@
 + (void)setupWithConfiguration:(S3ZConfiguration *)configuration;
 + (instancetype)sharedInstance;
 
-- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context;
+- (S3ZUploadJob *)enqueueVideo:(NSURL *)url forUserID:(NSString *)userID withContext:(id<NSCoding>)context cookie:(NSString *)cookie;
 - (void)cancelJob:(NSString *)jobID;
 - (void)cancelAllJobs;
 - (void)reEncodeJob:(NSString *)jobID;
