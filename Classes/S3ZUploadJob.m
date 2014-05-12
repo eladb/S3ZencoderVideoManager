@@ -35,6 +35,7 @@
     self.encodingRetries = [decoder decodeIntForKey:@"encodingRetries"];
     self.uploadingRetries = [decoder decodeIntForKey:@"uploadingRetries"];
     self.context = [decoder decodeObjectForKey:@"context"];
+    self.cookie = [decoder decodeObjectForKey:@"cookie"];
     
     return self;
 }
@@ -58,6 +59,7 @@
     [encoder encodeInt:self.encodingRetries forKey:@"encodingRetries"];
     [encoder encodeInt:self.uploadingRetries forKey:@"uploadingRetries"];
     [encoder encodeObject:self.context forKey:@"context"];
+    [encoder encodeObject:self.cookie forKey:@"cookie"];
 }
 
 - (void)setStage:(S3ZUploadJobStage)stage
