@@ -68,6 +68,8 @@ static S3ZUploadManager *instance = NULL;
     [[S3ZUploadManager sharedInstance] notifyAppBecomesActive];
 }
 
+/// When app is awake. Resume upload of previous jobs (if exits).
+///
 - (void)notifyAppBecomesActive
 {
     //NSLog(@"notifyAppBecomesActive");
@@ -86,7 +88,7 @@ static S3ZUploadManager *instance = NULL;
                         if (uploadJob.putObjectRequest) {
                             uploadJob.transferOperation = [self.transferManager upload:uploadJob.putObjectRequest];
                         } else {
-                            uploadJob.transferOperation = [self.transferManager uploadFile:[uploadJob.url path] bucket:self.configuration.awsBucket key:uploadJob.key];
+                            uploadJob.transferOperation = [self beginTransferManagerUpload:[uploadJob.url path] bucket:self.configuration.awsBucket key:uploadJob.key];
                         }
                     }
                 }
@@ -198,15 +200,33 @@ static S3ZUploadManager *instance = NULL;
     NSString *download = [NSString stringWithFormat:@"%@/%@/%@/MASTER.MOV", self.configuration.awsCDN, uploadJob.userID, uploadJob.S3PathContainer];
     uploadJob.playURL = [NSURL URLWithString:play];
     uploadJob.downloadURL = [NSURL URLWithString:download];
-    uploadJob.transferOperation = [self.transferManager uploadFile:newPath bucket:self.configuration.awsBucket key:key];
+    
+    
+    // S3TransferOperation might not always contain the put request. (Really??)
+    uploadJob.transferOperation = [self beginTransferManagerUpload:newPath bucket:self.configuration.awsBucket key:key];
     uploadJob.putObjectRequest = uploadJob.transferOperation.putRequest;
-
+    
     [self.jobs addObject:uploadJob];
     self.jobCount++;
-
+    
     [self notifyAppBecomesInactive];
-
+    
     return uploadJob;
+}
+
+- (S3TransferOperation *)beginTransferManagerUpload:(NSString *)filename bucket:(NSString *)bucket key:(NSString *)key;
+{
+    // Implementation based upon https://forums.aws.amazon.com/thread.jspa?threadID=118234
+    
+    S3PutObjectRequest *putObjectRequest = [[S3PutObjectRequest alloc] initWithKey:key inBucket:bucket];
+    putObjectRequest.data = [NSData dataWithContentsOfFile:filename];;
+    // We do not set contentType = [file contentType]; because we let S3 deduce this automatically.
+    putObjectRequest.delegate = self;
+    putObjectRequest.cannedACL = [S3CannedACL publicRead];
+    
+    NSLog(@"Uploading %@ to %@/%@", filename, bucket, key);
+    
+    return [self.transferManager upload:putObjectRequest];
 }
 
 - (void)encodeJob:(NSString *)jobID
@@ -382,8 +402,8 @@ static S3ZUploadManager *instance = NULL;
                                                                 @{
                                                                     @"bandwidth": @900,
                                                                     @"path": @"HLS.m3u8",
-                                                                }//,
-                                                            ],
+                                                                    }//,
+                                                                ],
                                                         }
                                                     ]
                                             };
@@ -472,7 +492,7 @@ static S3ZUploadManager *instance = NULL;
         // Cancel
         [uploadJob.transferOperation cancel];
         uploadJob.transferOperation = nil;
-
+        
         // Remove from jobs
         [self.jobs removeObject:uploadJob];
         self.jobCount--;
@@ -520,7 +540,7 @@ static S3ZUploadManager *instance = NULL;
             uploadJob.transferOperation = [self.transferManager resume:uploadJob.transferOperation requestDelegate:self];
         } else {
             NSLog(@"reUploadJob: !transferOperation");
-            uploadJob.transferOperation = [self.transferManager uploadFile:[uploadJob.url path] bucket:self.configuration.awsBucket key:uploadJob.key];
+            uploadJob.transferOperation = [self beginTransferManagerUpload:[uploadJob.url path] bucket:self.configuration.awsBucket key:uploadJob.key];
         }
     }
 }
