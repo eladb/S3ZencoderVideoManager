@@ -1,5 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "S3ZencoderVideoManager"
+  s.frameworks       = "MobileCoreServices"
   s.version          = "0.2.7"
   s.summary          = "A video uploader to S3 and Zencoder encoding queue. One file downloader with cache"
   s.homepage         = "https://github.com/sugarso/S3ZencoderVideoManager"
@@ -13,6 +14,5 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "7.0"
   s.public_header_files = "Classes/*.h"
   s.dependency 'Parse-iOS-SDK'
-  s.dependency 'MagicKit', :git => 'git@github.com:ezeep/MagicKit.git'
   s.vendored_frameworks = 'Frameworks/AWSRuntime.framework', 'Frameworks/AWSS3.framework'
 end

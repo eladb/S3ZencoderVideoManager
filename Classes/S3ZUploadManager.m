@@ -6,11 +6,12 @@
 //  Copyright (c) 2014 Sugar Studio. All rights reserved.
 //
 
+@import MobileCoreServices;
+
 #import <AWSRuntime/AWSRuntime.h>
 #import <AWSS3/AWSS3.h>
 #import "Parse.h"
 #import "S3ZUploadManager.h"
-#import "MagicKit.h"
 
 
 @interface S3ZUploadManager () <AmazonServiceRequestDelegate>
@@ -216,15 +217,23 @@ static S3ZUploadManager *instance = NULL;
     return uploadJob;
 }
 
+NSString* fileMIMEType(NSString* file)
+{
+    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[file pathExtension], NULL);
+    CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
+    CFRelease(UTI);
+    return (__bridge NSString *)MIMEType;
+}
+
 - (S3TransferOperation *)beginTransferManagerUpload:(NSString *)filename bucket:(NSString *)bucket key:(NSString *)key;
 {
     // Implementation based upon https://forums.aws.amazon.com/thread.jspa?threadID=118234
-    
     S3PutObjectRequest *putObjectRequest = [[S3PutObjectRequest alloc] initWithKey:key inBucket:bucket];
     putObjectRequest.data = [NSData dataWithContentsOfFile:filename];;
     // We do not set contentType = [file contentType]; because we let S3 deduce this automatically.
     putObjectRequest.delegate = self;
     putObjectRequest.cannedACL = [S3CannedACL publicRead];
+    putObjectRequest.contentType = fileMIMEType(filename);
     
     NSLog(@"Uploading %@ to %@/%@", filename, bucket, key);
     
