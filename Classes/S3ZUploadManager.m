@@ -10,6 +10,8 @@
 #import <AWSS3/AWSS3.h>
 #import "Parse.h"
 #import "S3ZUploadManager.h"
+#import "MagicKit.h"
+
 
 @interface S3ZUploadManager () <AmazonServiceRequestDelegate>
 

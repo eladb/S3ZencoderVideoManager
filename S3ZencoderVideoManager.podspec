@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "7.0"
   s.public_header_files = "Classes/*.h"
   s.dependency 'Parse-iOS-SDK'
-  s.dependency 'MagicKit'
+  s.dependency 'MagicKit', :git => 'git@github.com:ezeep/MagicKit.git'
   s.vendored_frameworks = 'Frameworks/AWSRuntime.framework', 'Frameworks/AWSS3.framework'
 end
